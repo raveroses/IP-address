@@ -72,15 +72,16 @@ main {
   align-items: flex-start;
   align-content: center;
   flex-wrap: wrap;
-  gap: 90px;
+  gap: 40px;
   background-color: white;
   width: 80%;
   max-width: 100%;
   position: absolute;
-  top: 200px;
+  top: 150px;
   padding: 50px 30px;
   left: 150px;
   border-radius: 10px;
+  z-index: 9;
 }
 .first {
   border-right: 1px solid gray;
@@ -94,6 +95,13 @@ main {
 .third {
   border-right: 1px solid gray;
   padding-right: 10px;
+}
+
+#map {
+  width: 100%;
+  height: 500px;
+  max-width: 100%;
+  z-index: 1;
 }
 
 @media (max-width: 480px) {

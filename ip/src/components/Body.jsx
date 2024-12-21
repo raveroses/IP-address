@@ -1,50 +1,59 @@
-import { useEffect, useState } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { useEffect, useState, useRef } from "react";
 
-const Body = (datas) => {
-  const [save, setSave] = useState("");
+const Body = ({ datas }) => {
+  const [save, setSave] = useState({});
+  const mapRef = useRef(null);
+
   useEffect(() => {
-    for (let [keys, value] of Object.entries(datas)) {
-      setSave(value);
+    if (datas) {
+      setSave(datas);
     }
-  }, []);
-  console.log(save?.ip);
+  }, [datas]);
+  console.log(save);
+
+  const { latitude, longitude, ip, country, region, asn, timezone, org } = save;
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      if (!mapRef.current) {
+        mapRef.current = L.map("map").setView([latitude, longitude], 13);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(mapRef.current);
+      } else {
+        mapRef.current.setView([latitude, longitude], 13);
+      }
+    }
+  }, [latitude, longitude]);
 
   return (
     <>
       <main>
         <div className="first">
           <p>IP ADDRESS</p>
-          <h3>{save?.ip}</h3>
+          <h3>{ip || "Loading..."}</h3>
         </div>
         <div className="second">
           <p>LOCATION</p>
-          <h3>
-            {`${save?.location?.country}, ${save?.location?.region}, ${save?.as?.asn}`}
-          </h3>
+          <h3>{`${country || ""}, ${region || ""}, ${asn || ""}`}</h3>
         </div>
         <div className="third">
           <p>TIMEZONE</p>
-          <h3>{save?.location?.timezone}</h3>
+          <h3>UTC{timezone || ""}</h3>
         </div>
-        <div className="fouth">
+        <div className="fourth">
           <p>ISP</p>
-          <h3>{save?.isp}</h3>
+          <h3>{org || ""}</h3>
         </div>
       </main>
-      ;
+
       <section>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d214893.9423994353!2d-117.14521148394344!3d32.6935476490803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80d95308292167f3%3A0x1d2a53b73db1296e!2s3123%20Boston%20Ave%2C%20San%20Diego%2C%20CA%2092113%2C%20USA!5e0!3m2!1sen!2sng!4v1734585939235!5m2!1sen!2sng"
-          style={{
-            width: "100%",
-            height: "650px",
-            style: "border:0;",
-            allowfullscreen: "",
-            loading: "lazy",
-            maxWidth: "100%",
-            referrerpolicy: "no-referrer-when-downgrade",
-          }}
-        ></iframe>
+        <div id="map" style={{ height: "500px" }}></div>
       </section>
     </>
   );
