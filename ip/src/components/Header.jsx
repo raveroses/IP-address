@@ -7,10 +7,7 @@ export default function Header({
 }) {
   return (
     <>
-      <div
-        className="heading"
-        style={{ backgroundImage: "/images/pattern-bg-desktop.png" }}
-      >
+      <div className="heading">
         <h2>IP Address Tracker </h2>
         <form onSubmit={handleSubmission}>
           <input
