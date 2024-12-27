@@ -23,7 +23,7 @@ p {
 }
 
 .heading {
-  background-image: url("images/pattern-bg-desktop.png");
+  background-image: url("/images/desktop.png");
   width: 100%;
   height: 250px;
   background-position: center;
